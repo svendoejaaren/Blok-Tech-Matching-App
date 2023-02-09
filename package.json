@@ -1,0 +1,20 @@
+{
+  "name": "blok-tech-matching-app",
+  "version": "1.0.0",
+  "description": "Hier word later tekst aan toegevoegd.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svendoejaaren/Blok-Tech-Matching-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/svendoejaaren/Blok-Tech-Matching-App/issues"
+  },
+  "homepage": "https://github.com/svendoejaaren/Blok-Tech-Matching-App#readme"
+}
