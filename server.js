@@ -1,4 +1,5 @@
 const express = require('express')
+const ejs = require('ejs')
 const app = express()
 
 const port = 3000
@@ -6,17 +7,21 @@ const port = 3000
 // Static files
 app.use(express.static('static'))
 
+// Set view engine
+app.set('view engine', 'ejs')
+app.set('views', 'view')
+
 // Routes
 app.get('/', (req, res) => {
     res.send("Hello world!")
 })
 
 app.get('/login', (req, res) => {
-    res.send("Log in")
+    res.render('login.ejs')
 })
 
 app.get('/registreren', (req, res) => {
-    res.send("Registreren")
+    res.render('registreer.ejs')
 })
 
 app.get('/profiel/:user', (req, res) => {
