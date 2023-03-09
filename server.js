@@ -1,14 +1,30 @@
+require('dotenv').config()
+
+// Database connectie
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://" + process.env.DB_USERNAME + ":" + process.env.DB_PASS + "@" + process.env.DB_HOST + 
+            "." + process.env.DB_NAME + "/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+client.connect(err => {
+    if (err) {
+        throw err
+    } else {
+        console.log("Verbonden met de database")
+    }
+});
+
+// Lokale packages activeren
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
 
-const port = 3000
+const port = process.env.PORT
 
 // Static files
 app.use(express.static('static'))
 
 // Set view engine
-app.set('view engine', 'ejs')
+app.set('view engine', ejs)
 app.set('views', 'view')
 
 // Routes
