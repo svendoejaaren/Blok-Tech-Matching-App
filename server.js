@@ -17,11 +17,16 @@ client.connect(err => {
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
 
 const port = process.env.PORT
 
 // Static files
 app.use(express.static('static'))
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Set view engine
 app.set('view engine', ejs)
@@ -37,7 +42,7 @@ app.get('/login', (req, res) => {
 })
 
 app.get('/registreren', (req, res) => {
-    res.render('registreer.ejs')
+    res.render('registreren.ejs')
 })
 
 app.get('/profiel/:user', (req, res) => {
