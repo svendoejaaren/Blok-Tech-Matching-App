@@ -19,6 +19,10 @@ const ejs = require('ejs')
 const app = express()
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const bcrypt = require('bcryptjs')
+const userSchema = require('./models/user')
+
+const saltRounds = 10
 
 const port = process.env.PORT
 
@@ -43,6 +47,31 @@ app.get('/login', (req, res) => {
 
 app.get('/registreren', (req, res) => {
     res.render('registreren.ejs')
+})
+
+app.post('/registreren', async (req, res) => {
+    const { username, email, password, experience } = req.body
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+    const user = {
+        username,
+        email,
+        password: hashedPassword,
+        experience
+    }
+
+    const mongo = new MongoClient(uri, { useNewUrlParser: true})
+    mongo.connect(async (err) => {
+        const db = mongo.db('legendTest')
+        const collection = db.collection('users')
+        await collection.insertOne(user)
+        mongo.close()
+        res.redirect('/succes')
+    })
+})
+
+app.get('/succes', (req, res) => {
+    res.send('Je bent geregistreerd!')
 })
 
 app.get('/profiel/:user', (req, res) => {
