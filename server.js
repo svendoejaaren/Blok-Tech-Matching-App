@@ -1,28 +1,31 @@
 require('dotenv').config()
 
 // Database connectie
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://" + process.env.DB_USERNAME + ":" + process.env.DB_PASS + "@" + process.env.DB_HOST + 
-            "." + process.env.DB_NAME + "/?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+const { MongoClient, ServerApiVersion } = require('mongodb')
+const uri = "mongodb+srv://" + process.env.DB_USERNAME + ":" + process.env.DB_PASS + "@" + process.env.DB_NAME + 
+            "." + process.env.DB_HOST + "/?retryWrites=true&w=majority"
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
 client.connect(err => {
     if (err) {
-        throw err
+        //throw err
+        console.log(err)
     } else {
+        console.log(uri)
         console.log("Verbonden met de database")
     }
-});
+})
 
 // Lokale packages activeren
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
+const bodyParser = require('body-parser')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const bcrypt = require('bcryptjs')
 const userSchema = require('./models/user')
 
-const saltRounds = 10
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 const port = process.env.PORT
 
@@ -30,7 +33,7 @@ const port = process.env.PORT
 app.use(express.static('static'))
 
 app.use(passport.initialize())
-app.use(passport.session())
+//app.use(passport.session())
 
 // Set view engine
 app.set('view engine', ejs)
@@ -49,24 +52,33 @@ app.get('/registreren', (req, res) => {
     res.render('registreren.ejs')
 })
 
-app.post('/registreren', async (req, res) => {
-    const { username, email, password, experience } = req.body
-    const hashedPassword = await bcrypt.hash(password, saltRounds)
+app.post('/registreren', (req, res) => {
+    const { username, email, password } = req.body
+    //const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     const user = {
         username,
         email,
-        password: hashedPassword,
-        experience
+        password
     }
 
-    const mongo = new MongoClient(uri, { useNewUrlParser: true})
+    console.log('tot hier');
+
+    const mongo = new MongoClient(uri, { useNewUrlParser: true })
+
     mongo.connect(async (err) => {
-        const db = mongo.db('legendTest')
-        const collection = db.collection('users')
-        await collection.insertOne(user)
-        mongo.close()
-        res.redirect('/succes')
+
+        try {
+            console.log('kaas');
+            const db = mongo.db('legendTest')
+            const collection = db.collection('users')
+            console.log(collection)
+            await collection.insertOne(user)
+            mongo.close()
+            res.redirect('/succes')
+        } catch(error) {
+            console.log(error);
+        }
     })
 })
 
