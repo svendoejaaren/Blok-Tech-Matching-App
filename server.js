@@ -64,23 +64,23 @@ app.post('/succes', (req, res) => {
 
     console.log('tot hier');
 
-    const mongo = new MongoClient(uri, { useNewUrlParser: true })
+    // const mongo = new MongoClient(uri, { useNewUrlParser: true })
 
-    mongo.connect(async (err) => {
+    // mongo.connect(async (err) => {
 
         try {
             console.log('kaas');
-            const db = mongo.db('legendTest')
+            const db = client.db('legendTest')
             const collection = db.collection('users')
             console.log(collection)
-            await collection.insertOne(user)
-            mongo.close()
-            res.redirect('/succes')
+            collection.insertOne(user)
+            // mongo.close()
+            // res.redirect('/succes')
+            res.render('succes.ejs')
         } catch(error) {
             console.log(error);
         }
     })
-})
 
 app.get('/succes', (req, res) => {
     res.send('Je bent geregistreerd!')
