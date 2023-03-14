@@ -3,14 +3,14 @@ require('dotenv').config()
 // Database connectie
 const { MongoClient, ServerApiVersion } = require('mongodb')
 const uri = "mongodb+srv://" + process.env.DB_USERNAME + ":" + process.env.DB_PASS + "@" + process.env.DB_NAME + 
-            "." + process.env.DB_HOST + "/?retryWrites=true&w=majority"
+            "." + process.env.DB_HOST
+// + "/?retryWrites=true&w=majority"
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 })
 client.connect(err => {
     if (err) {
         //throw err
         console.log(err)
     } else {
-        console.log(uri)
         console.log("Verbonden met de database")
     }
 })
@@ -52,7 +52,7 @@ app.get('/registreren', (req, res) => {
     res.render('registreren.ejs')
 })
 
-app.post('/registreren', (req, res) => {
+app.post('/succes', (req, res) => {
     const { username, email, password } = req.body
     //const hashedPassword = await bcrypt.hash(password, saltRounds)
 
