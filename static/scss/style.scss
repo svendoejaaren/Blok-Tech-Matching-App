@@ -1,34 +1,74 @@
 /* CSS reset*/
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Custom variables */
+:root {
+    --bg-color: #eee;
 }
 
 body {
-  display: flex;
-  justify-content: center;
-}
-
-main {
-  width: 360px;
-  height: 800px;
-  border: 1px solid #000;
+    background-color: var(--bg-color);
 }
 
 h1 {
-  text-align: center;
+    text-align: center;
 }
 
-label {
-  display: block;
-}
+form {
+    margin: 1em auto 0;
+    width: 69%;
 
-input:last-of-type {
-  display: block;
-  margin: auto;
+    label {
+        display: block;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    input[type="email"] {
+        margin-bottom: 1em;
+        padding: 0.3em;
+        width: 105%;
+    }
+
+    input[type="submit"] {
+        width: 105%;
+        padding: 0.4em;
+    }
 }
 
 p {
-  text-align: center;
+    margin-top: 2em;
+    text-align: center;
 }
+
+// body {
+//   display: flex;
+//   justify-content: center;
+// }
+
+// main {
+//   width: 360px;
+//   height: 800px;
+//   border: 1px solid #000;
+// }
+
+// h1 {
+//   text-align: center;
+// }
+
+// label {
+//   display: block;
+// }
+
+// input:last-of-type {
+//   display: block;
+//   margin: auto;
+// }
+
+// p {
+//   text-align: center;
+// }
