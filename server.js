@@ -21,8 +21,9 @@ const ejs = require('ejs')
 const app = express()
 const bodyParser = require('body-parser')
 const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
+const LocalStrategy = require('passport-local')
 const userSchema = require('./models/user')
+const session = require('express-session')
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -32,8 +33,28 @@ const port = process.env.PORT
 // Static files
 app.use(express.static('static'))
 
+// passport opzetten
 app.use(passport.initialize())
-//app.use(passport.session())
+app.use(passport.session())
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        userSchema.findOne({username: username }, function(error, user) {
+            if (error) {
+                return done(error)
+            }
+            if (!user) {
+                return done(null, false, { message: 'Gebruiker niet gevonden'})
+            }
+            if (!user.verifyPassword(password)) {
+                return done(null, false, { message: 'Wachtwoord klopt niet' })
+            }
+            return done(null, user)
+        })
+    }
+))
+passport.serializeUser(userSchema.serializeUser)
+passport.deserializeUser(userSchema.deserializeUser)
 
 // Set view engine
 app.set('view engine', ejs)
@@ -46,6 +67,29 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     res.render('login.ejs')
+})
+
+// Inloggen afhandelen en kijken of gegevens matchen vanuit de database
+app.post("/login", async (req, res) => {
+    try {
+        const user = await userSchema.findOne({ username: req.body.username })
+        if (user) {
+            const result = req.body.password === user.password
+            if (result) {
+                res.render("profiel")
+            } else {
+                res.status(400).json({ error: "Onjuiste wachtwoord" })
+            }
+        } else {
+            res.status(400).json({ error: "Gebruikersnaam klopt niet" })
+        }
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+})
+
+app.get("/profiel", isLoggedIn, (req, res) => {
+    res.render("profiel.ejs")
 })
 
 app.get('/registreren', (req, res) => {
@@ -61,17 +105,17 @@ app.post('/succes', (req, res) => {
         password
     }
 
-    console.log('tot hier');
+    console.log('tot hier')
 
     try {
-        console.log('kaas');
+        console.log('kaas')
         const db = client.db('legendTest')
         const collection = db.collection('users')
         console.log(collection)
         collection.insertOne(user)
         res.render('succes.ejs')
     } catch(error) {
-        console.log(error);
+        console.log(error)
     }
 })
 
