@@ -54,7 +54,6 @@ app.get('/registreren', (req, res) => {
 
 app.post('/succes', (req, res) => {
     const { username, email, password } = req.body
-    //const hashedPassword = await bcrypt.hash(password, saltRounds)
 
     const user = {
         username,
@@ -64,23 +63,17 @@ app.post('/succes', (req, res) => {
 
     console.log('tot hier');
 
-    // const mongo = new MongoClient(uri, { useNewUrlParser: true })
-
-    // mongo.connect(async (err) => {
-
-        try {
-            console.log('kaas');
-            const db = client.db('legendTest')
-            const collection = db.collection('users')
-            console.log(collection)
-            collection.insertOne(user)
-            // mongo.close()
-            // res.redirect('/succes')
-            res.render('succes.ejs')
-        } catch(error) {
-            console.log(error);
-        }
-    })
+    try {
+        console.log('kaas');
+        const db = client.db('legendTest')
+        const collection = db.collection('users')
+        console.log(collection)
+        collection.insertOne(user)
+        res.render('succes.ejs')
+    } catch(error) {
+        console.log(error);
+    }
+})
 
 app.get('/succes', (req, res) => {
     res.send('Je bent geregistreerd!')
