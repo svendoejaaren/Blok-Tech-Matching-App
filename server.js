@@ -111,7 +111,6 @@ app.post('/succes', (req, res) => {
         console.log('kaas')
         const db = client.db('legendTest')
         const collection = db.collection('users')
-        console.log(collection)
         collection.insertOne(user)
         res.render('succes.ejs')
     } catch(error) {
