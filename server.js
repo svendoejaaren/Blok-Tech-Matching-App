@@ -11,7 +11,6 @@ const uri =
   process.env.DB_NAME +
   '.' +
   process.env.DB_HOST
-// + "/?retryWrites=true&w=majority"
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -52,19 +51,25 @@ app.get('/login', (req, res) => {
 })
 
 app.post('/profiel', async (req, res) => {
+  // Haal username uit username inlog veld
   const username = req.body.username
 
+  // Selecteer de juiste database en collectie
   const db = client.db('legendTest')
   const collection = db.collection('users')
 
+  // Maak een object aan die data uit database bevat die gelijk is aan de ingevoerde username als die in de database zit
   result = await collection.findOne({
     username: username,
   })
 
-  console.log(result.username)
-
-  // if result = ga naar profiel pagina
-  // else blijf op login pagina met foutmelding
+  // Wachtwoord van de opgehaalde gebruiker vergelijken met wat is ingetypt
+  if (result.password === req.body.password) {
+    res.render('profiel.ejs', { username: req.body.username })
+  } else {
+    console.log('Gebruikersnaam of wachtwoord klopt niet')
+    res.render('login.ejs')
+  }
 })
 
 app.get('/registreren', (req, res) => {
