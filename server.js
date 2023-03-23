@@ -30,42 +30,13 @@ client.connect((err) => {
 const express = require('express')
 const ejs = require('ejs')
 const app = express()
-// const bodyParser = require('body-parser')
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local");
-// const userSchema = require("./models/user");
-// const session = require("express-session");
 
 app.use(express.urlencoded({ extended: true }))
-// app.use(bodyParser.json());
 
 const port = process.env.PORT
 
 // Static files
 app.use(express.static('static'))
-
-// passport opzetten
-// app.use(passport.initialize());
-// app.use(passport.session())
-
-// passport.use(new LocalStrategy(
-//     function(username, password, done) {
-//         userSchema.findOne({username: username }, function(error, user) {
-//             if (error) {
-//                 return done(error)
-//             }
-//             if (!user) {
-//                 return done(null, false, { message: 'Gebruiker niet gevonden'})
-//             }
-//             if (!user.verifyPassword(password)) {
-//                 return done(null, false, { message: 'Wachtwoord klopt niet' })
-//             }
-//             return done(null, user)
-//         })
-//     }
-// ))
-// passport.serializeUser(userSchema.serializeUser)
-// passport.deserializeUser(userSchema.deserializeUser)
 
 // Set view engine
 app.set('view engine', ejs)
@@ -102,15 +73,7 @@ app.post('/succes', (req, res) => {
   const collection = db.collection('users')
   collection.insertOne(user) // hiervoor hebben we de gegevens van het registreerformulier in een object gezet
 
-  res.render('succes.ejs')
-})
-
-app.get('/succes', (req, res) => {
-  res.send('Je bent geregistreerd!')
-})
-
-app.get('/profiel/:user', (req, res) => {
-  res.send('Hallo ' + req.params.user + '! Welkom')
+  res.render('succes.ejs', { username: req.body.username })
 })
 
 // Alle andere routes gaan hierheen
