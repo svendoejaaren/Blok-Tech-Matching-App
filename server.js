@@ -51,6 +51,22 @@ app.get('/login', (req, res) => {
   res.render('login.ejs')
 })
 
+app.post('/profiel', async (req, res) => {
+  const username = req.body.username
+
+  const db = client.db('legendTest')
+  const collection = db.collection('users')
+
+  result = await collection.findOne({
+    username: username,
+  })
+
+  console.log(result.username)
+
+  // if result = ga naar profiel pagina
+  // else blijf op login pagina met foutmelding
+})
+
 app.get('/registreren', (req, res) => {
   res.render('registreren.ejs')
 })
