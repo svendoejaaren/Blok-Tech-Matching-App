@@ -57,20 +57,17 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/profiel", async (req, res) => {
-    // Haal username uit username inlog veld
-    const username = req.body.username
-
-    // Maak een object aan die data uit database bevat die gelijk is aan de ingevoerde username als die in de database zit
-    result = await collection.findOne({
-        username: username,
+    const usernameCheck = await collection.findOne({
+        username: req.body.username,
     })
 
-    // Wachtwoord van de opgehaalde gebruiker vergelijken met wat is ingetypt
-    if (result.username === req.body.username) {
+    const errorMessage = "Gebruikersnaam of wachtwoord klopt niet"
+
+    if (usernameCheck) {
         res.render("profiel.ejs", { username: req.body.username })
     } else {
         console.log("Gebruikersnaam of wachtwoord klopt niet")
-        res.render("login.ejs")
+        res.render("login.ejs", { errorMessage: errorMessage })
     }
 })
 

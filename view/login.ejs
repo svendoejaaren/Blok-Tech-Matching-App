@@ -8,6 +8,9 @@
     <main>
         <img src="../static/img/logo.png" alt="Legend">
         <h1>Log in</h1>
+        <% if(typeof errorMessage !== "undefined" && errorMessage) { %>
+            <p><%= errorMessage %></p>
+        <% } %>
         <form method="POST" action="/profiel">
             <label for="gebruikersnaam">Gebruikersnaam</label>
             <input type="text" name="username" id="gebruikersnaam" required>
