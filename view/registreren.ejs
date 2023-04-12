@@ -11,6 +11,9 @@
     <main>
         <img src="../static/img/logo.png" alt="Legend">
         <h1>Registreren</h1>
+        <% if(typeof errorMessage !== "undefined" && errorMessage) { %>
+            <p><%= errorMessage %></p>
+        <% } %>
         <form method="POST" action="/succes">
             <label for="gebruikersnaam">Gebruikersnaam</label>
             <input type="text" name="username" id="gebruikersnaam" required>
@@ -20,14 +23,7 @@
             <input type="password" name="password" id="wachtwoord" required>
             <input type="submit" value="Meld je aan">
         </form> 
-        <p>Heb je al een account? <a href="./index.html">Log in!</a></p>
-        <section>
-            <h2>Kies je niveau</h2>
-            <img src="" alt="Beginner">
-            <img src="" alt="Gemiddeld">
-            <img src="" alt="Gevorderd">
-        </section>
+        <p>Heb je al een account? <a href="login">Log in!</a></p>
     </main>
-    <!-- <script src="/script.js"></script> -->
 </body>
 </html>
