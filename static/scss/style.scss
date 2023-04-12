@@ -16,11 +16,12 @@ body {
 
 h1 {
     text-align: center;
+    margin-top: 5em;
 }
 
 form {
     margin: 1em auto 0;
-    width: 69%;
+    width: 15em;
 
     label {
         display: block;
@@ -31,11 +32,11 @@ form {
     input[type="email"] {
         margin-bottom: 1em;
         padding: 0.3em;
-        width: 105%;
+        width: 18em;
     }
 
     input[type="submit"] {
-        width: 105%;
+        width: 18em;
         padding: 0.4em;
     }
 }

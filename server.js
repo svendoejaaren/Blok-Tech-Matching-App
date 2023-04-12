@@ -57,13 +57,24 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/profiel", async (req, res) => {
-    const usernameCheck = await collection.findOne({
-        username: req.body.username,
-    })
+    const username = req.body.username
+    const password = req.body.password
 
+    let passwordCheck = null
     const errorMessage = "Gebruikersnaam of wachtwoord klopt niet"
 
-    if (usernameCheck) {
+    // Check of gebruiker in de database staat
+    const user = await collection.findOne({
+        username: username,
+    })
+
+    if (!user) {
+        res.render("login.ejs", { errorMessage: errorMessage })
+    } else {
+        passwordCheck = await bcrypt.compare(password, user.password)
+    }
+
+    if (user && passwordCheck) {
         res.render("profiel.ejs", { username: req.body.username })
     } else {
         console.log("Gebruikersnaam of wachtwoord klopt niet")
@@ -99,7 +110,6 @@ app.post("/succes", async (req, res) => {
         "Deze gebruikersnaam is niet beschikbaar. Kies een andere."
 
     if (usernameCheck) {
-        console.log("Gebruikersnaam bestaat al")
         res.render("registreren.ejs", { errorMessage: errorMessage })
     } else {
         collection.insertOne(user)
